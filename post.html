@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Error404 Pentesting Book</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-left">
+      <h1>Error404 Pentesting Book</h1>
+      <span>Teoria de ataque cibernético e artigos.</span>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html">🏠 Home</a>
+      <a href="#">📂 Categories</a>
+      <a href="#">🏷️ Tags</a>
+      <a href="#">🗃️ Archives</a>
+      <a href="#">💻 HTB Writeups</a>
+      <a href="#">📚 Theory</a>
+      <a href="#">ℹ️ About</a>
+    </nav>
+  </header>
+
+  <main class="content">
+    <article id="post-content" class="post-detalhe">
+      <h2>Carregando...</h2>
+      <p>Aguarde um momento...</p>
+    </article>
+  </main>
+
+  <script>
+    async function carregarPost() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      if (!id) return;
+    
+      const resposta = await fetch('posts.json');
+      const posts = await resposta.json();
+      const post = posts.find(p => p.id === id);
+    
+      const container = document.getElementById('post-content');
+      if (!post) {
+        container.innerHTML = "<h2>Post não encontrado 😢</h2>";
+        return;
+      }
+    
+      // Carrega HTML separado do post
+      const conteudoResposta = await fetch(post.file);
+      const conteudoHTML = await conteudoResposta.text();
+    
+      container.innerHTML = conteudoHTML;
+    }
+    carregarPost();
+    </script>    
+</body>
+</html>

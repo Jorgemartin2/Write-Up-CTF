@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Error404 Pentesting Book</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-left">
+      <h1>Error404 Pentesting Book</h1>
+      <span>Teoria de ataque cibernético e artigos.</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#">🏠 Home</a>
+      <a href="#">📂 Categorias</a>
+      <a href="#">🏷️ Tags</a>
+      <a href="#">🗃️ Arquivos</a>
+      <a href="#">💻 HC Writeups</a>
+      <a href="#">📚 Teoria</a>
+      <a href="#">ℹ️ Sobre</a>
+    </nav>
+  </header>
+
+  <main class="content">
+    <h2>Home</h2>
+    <div id="posts" class="posts-container"></div>
+  </main>
+
+  <script>
+    async function carregarPosts() {
+      const resposta = await fetch('posts.json');
+      const posts = await resposta.json();
+      const container = document.getElementById('posts');
+
+      posts.forEach(post => {
+        const card = document.createElement('a');
+        card.className = 'post-card';
+        card.href = `post.html?id=${encodeURIComponent(post.id)}`;
+        card.innerHTML = `
+          <div class="post-text">
+            <h3>${post.title}</h3>
+            <p>${post.summary}</p>
+            <div class="post-meta">
+              <span>📅 ${post.date}</span>
+              <span>🏷️ ${post.category}</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    carregarPosts();
+  </script>
+</body>
+</html>
