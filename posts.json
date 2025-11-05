@@ -2,17 +2,21 @@
   {
     "id": "reborn",
     "title": "Reborn",
-    "summary": "Uma máquina Hacking Club de classificação fácil demonstrando um ataque.",
+    "summary": "Essa máquina apresenta uma cadeia de comprometimento que começou com<br> uma vulnerabilidade de command injection no aplicativo web.",
     "date": "Oct 1, 2025",
     "category": "Hacking Club",
-    "file": "posts/reborn/reborn.html"
+    "file": "posts/reborn/reborn.md",
+    "image": "images/hackingclub-reborn/file-reborn-2025-1.png",
+    "author": "Jorge Martin"
   },
   {
-    "id": "outro-post",
-    "title": "Outro Post",
-    "summary": "Descrição breve de outro post.",
-    "date": "Oct 5, 2025",
-    "category": "Teoria",
-    "file": "posts/outro/outro.html"
+    "id": "locked",
+    "title": "Locked",
+    "summary": "Essa máquina apresenta uma cadeia de comprometimento que começou com<br> uma vulnerabilidade de php insecure deserialization no aplicativo web.",
+    "date": "Oct 25, 2025",
+    "category": "Hacking Club",
+    "file": "posts/locked/locked.md",
+    "image": "images/hackingclub-locked/file-locked-2025-1.png",
+    "author": "Jorge Martin"
   }
 ]
