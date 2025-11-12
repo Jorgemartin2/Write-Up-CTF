@@ -25,7 +25,7 @@ O código define uma rota GET que só pode ser acessada por endereços IP intern
 
 ## Documentação da API do Axios e burlando a função
 
-![ApiAxios](//images/hackingclub-proxy/file-proxy-2025-5.png)
+![ApiAxios](/images/hackingclub-proxy/file-proxy-2025-5.png)
 
 Além de aceitar uma string com a URL, a API do Axios também permite receber um objeto de configuração (contendo campos como method, url, headers, etc.). Essa flexibilidade foi explorada para contornar validações simples que assumem que `url` é apenas uma string.
 
