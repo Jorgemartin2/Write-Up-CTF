@@ -18,5 +18,15 @@
     "file": "posts/locked/locked.md",
     "image": "images/hackingclub-locked/file-locked-2025-1.png",
     "author": "Jorge Martin"
+  },
+  {
+    "id": "neonforge",
+    "title": "NeonForge",
+    "summary": "Essa máquina apresenta uma cadeia de comprometimento que começou com<br> uma vulnerabilidade de SSTI no aplicativo web.",
+    "date": "Nov 10, 2025",
+    "category": "Hacking Club",
+    "file": "posts/neonforge/neonforge.md",
+    "image": "images/hackingclub-neonforge/file-neonforge-2025-1.png",
+    "author": "Jorge Martin"
   }
 ]

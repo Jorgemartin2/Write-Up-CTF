@@ -11,7 +11,7 @@ A máquina REBORN (dificuldade Easy) apresenta uma cadeia de comprometimento que
 Quando tentamos acessar o web service, somos redirecionados para `reborn.hc`. Precisamos acrescentar isso em nosso arquivo `/etc/hosts`:
 
 ```bash
-curl -I http://$IP
+curl -I $IP
 echo "$IP reborn.hc" | sudo tee -a /etc/hosts
 ```
 
