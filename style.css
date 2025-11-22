@@ -171,10 +171,6 @@ body {
   transform: translateY(0);
 }
 
-/* ===========================
-   POST DETALHE — ESTILO PROFISSIONAL
-   =========================== */
-
 /* Container principal */
 .post-detalhe {
   font-family: "Source Sans Pro", "Microsoft Yahei", sans-serif;
@@ -212,10 +208,6 @@ body {
   margin-bottom: 15px;
   color: #cccccc;
 }
-
-/* ===========================
-   BLOCO DE CÓDIGO
-   =========================== */
 
 /* Container do código */
 .post-body pre {
@@ -346,13 +338,190 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  /* espaço entre ícone e texto */
   font-weight: bold;
   color: #fff;
-  /* se quiser */
 }
 
 .app-title .icon {
   width: 18px;
   height: 18px;
+}
+
+/* ====== BLOCO INFORMATIVO ====== */
+.prompt-info {
+  position: relative;
+  background: #0C3357;
+  color: #fff;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border-left: 4px solid #0c08ee;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(3px);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.prompt-info:hover {
+  background: #0D3B66;
+  border-left-color: #6cbaff;
+}
+
+.prompt-info::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 48%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 14px;
+  height: 14px;
+  background: #0C3357;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+}
+
+/* ====== BLOCO DE ALERTA (warning) ====== */
+.prompt-warning {
+  position: relative;
+  background: rgba(235, 184, 3, 0.25);
+  color: #fff;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border-left: 4px solid #ffd85c;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(3px);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.prompt-warning:hover {
+  background: rgba(245, 201, 3, 0.3);
+  border-left-color: #ffeb7a;
+}
+
+.prompt-warning::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 48%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 14px;
+  height: 14px;
+  background: rgba(110, 90, 20, 0.25);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+}
+
+/* ====== BLOCO DE ERRO (danger) ====== */
+.prompt-danger {
+  position: relative;
+  background: rgba(230, 4, 4, 0.25);
+  color: #fff;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border-left: 4px solid #ff5c5c;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(3px);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.prompt-danger:hover {
+  background: rgba(184, 1, 1, 0.3);
+  border-left-color: #ff7f7f;
+}
+
+.prompt-danger::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 48%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 14px;
+  height: 14px;
+  background: rgba(110, 20, 20, 0.25);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+}
+
+/* ====== BLOCO DE SUCESSO (success) ====== */
+.prompt-success {
+  position: relative;
+  background: rgba(4, 245, 113, 0.25);
+  color: #fff;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border-left: 4px solid #4eff9a;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(3px);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.prompt-success:hover {
+  background: rgba(19, 182, 87, 0.3);
+  border-left-color: #6effb5;
+}
+
+.prompt-success::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 48%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 14px;
+  height: 14px;
+  background: rgba(20, 110, 60, 0.25);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+}
+
+.scroll-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 55px;
+  height: 55px;
+  border: 1px solid #2f2f2f;
+  border-radius: 10px;
+  background: #151515;
+  color: #cfcfcf;
+  font-size: 22px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 8px rgba(0, 255, 255, 0.06),
+    inset 0 0 6px rgba(255, 255, 255, 0.03);
+  transition: all 0.2s ease;
+}
+
+.scroll-btn:hover {
+  background: #1b1b1b;
+  border-color: #3a3a3a;
+  box-shadow:
+    0 0 10px rgba(0, 255, 255, 0.1),
+    inset 0 0 10px rgba(255, 255, 255, 0.06);
+  transform: translateY(-3px);
+}
+
+.scroll-btn.show {
+  display: flex;
+  animation: fadeIn 0.25s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
